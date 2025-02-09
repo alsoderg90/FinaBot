@@ -15,23 +15,9 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { v4 as uuidv4 } from 'uuid'
 import { IMessage } from './types'
 
-const initialPOCState: IMessage[] = [
-  {
-    content: 'Mitä kuuluu',
-    id: '123-123',
-    role: 'user'
-  },
-  {
-    content: 'Hyväää kiitos.',
-    id: '123-124',
-    role: 'ai'
-  }
-]
-
 function FrontPage() {
   const [input, setInput] = useState<string>('')
-  const [messages, setMessages] =
-    useState<IMessage[]>(initialPOCState)
+  const [messages, setMessages] = useState<IMessage[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
   const newChatMessage = useMutation({
