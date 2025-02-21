@@ -20,8 +20,14 @@ class Chat(Resource):
         try:
             user_request = request.get_json()
             user_input = user_request['data']['input']
+            conversation_history = user_request['data']['history']
             if (user_input is None) or (user_input == ""):
                 return make_response(jsonify({"error": "Input is required.", "error_code": 400}), 400)
+            if len(conversation_history) > 0:
+                rephrased_query = query_transformation_service.rephrase_query(conversation_history, user_input)
+                new_user_input = chat_service.get_answer(rephrased_query)
+                user_input = new_user_input['content'] if new_user_input else user_input
+            print(user_input)
             relevant_documents = document_search_service.search_relevant_documents(user_input, vector_type='tfidf')
             query = query_transformation_service.default_query(relevant_documents, user_input)
             answer = chat_service.get_answer(query)

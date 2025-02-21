@@ -4,8 +4,35 @@ class QueryTransformationService:
     def __init__(self):
         pass
 
-    def default_query(self, relevant_documents, user_input):
-        print(len(relevant_documents))
+    @staticmethod
+    def rephrase_query(conversation_history, new_question):
+        history = "\n\n".join([
+            f"{msg['role'].capitalize()}: {msg['content']}"
+            for msg in conversation_history
+        ])
+        template = f"""
+        You are an AI assistant that answers questions based strictly on provided documents.
+        You need rewrite this question so that it makes sense on its own, without the previous 
+        conversation. If the new question makes sense on its own without the previous conversation,
+        return it unchanged. Do not add any extra information. 
+        Here is a conversation history:
+
+        {history}
+
+        Now, the user asks: "{new_question}"
+
+        ## Instructions
+        - Rewrite the question so that it makes sense on its own.
+        - Do not add any extra information.
+        - Use the same language as the question.
+        - Do not provide document references.
+        - Keep the question as short as possible.
+        - If the question is already clear, return it unchanged.
+        """
+        return template
+
+    @staticmethod
+    def default_query(relevant_documents, user_input):
         context = "\n\n---\n\n".join([f"Document {i + 1}:\n{doc}" for i, (doc, _) in enumerate(relevant_documents)])
 
         template = f"""

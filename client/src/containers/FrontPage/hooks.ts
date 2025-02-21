@@ -8,6 +8,7 @@ export const postRequest = async (
   if (!apiConfig.backendUrl) {
     throw new Error('Backend URL is not defined')
   }
+  console.log(data)
   const response = await axios.post(`${apiConfig.backendUrl}/chat`, {
     data
   })

@@ -10,7 +10,6 @@ class ChatService:
     def get_answer(self, query):
         return self.__generate_answer(query)
 
-
     def __generate_answer(self, query):
         client = self.__get_client()
         response = client.models.generate_content(
@@ -20,7 +19,7 @@ class ChatService:
         return {
             "content": response.text,
             "id": uuid1,
-            "role": "ai"
+            "role": "Ai Assistant"
         }
 
     def __get_client(self):

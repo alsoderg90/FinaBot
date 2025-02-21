@@ -5,5 +5,6 @@ export interface IMessage {
 }
 
 export interface PostDataInput {
-  [key: string]: string
+  input: string
+  history: IMessage[]
 }

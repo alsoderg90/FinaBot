@@ -18,6 +18,8 @@ import { ErrorResponse, handleError } from '../../api/api-utils'
 import { AxiosError } from 'axios'
 import ErrorModal from '../../components/ErrorComponent'
 
+const USER_ROLE = 'User'
+
 function FrontPage() {
   const [input, setInput] = useState<string>('')
   const [messages, setMessages] = useState<IMessage[]>([])
@@ -28,6 +30,7 @@ function FrontPage() {
     onSuccess: (data) => {
       setMessages((prev) => prev.concat(data))
       setLoading(false)
+      setInput('')
     },
     onError: (error: unknown) => {
       if (error instanceof AxiosError) {
@@ -35,20 +38,24 @@ function FrontPage() {
         setError(errorResponse)
       }
       setLoading(false)
+      setInput('')
     }
   })
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     setLoading(true)
+    newChatMessage.mutate({
+      input,
+      history: messages
+    })
     setMessages((prev) =>
       prev.concat({
         content: input,
-        role: 'user',
+        role: USER_ROLE,
         id: uuidv4()
       })
     )
-    newChatMessage.mutate({ input })
   }
 
   if (error) {
@@ -91,7 +98,7 @@ function FrontPage() {
                 key={m.id}
                 sx={{
                   justifyContent:
-                    m.role === 'user' ? 'flex-end' : 'flex-start'
+                    m.role === USER_ROLE ? 'flex-end' : 'flex-start'
                 }}
               >
                 <Paper
@@ -100,15 +107,15 @@ function FrontPage() {
                     p: 2,
                     maxWidth: '70%',
                     bgcolor:
-                      m.role === 'user'
+                      m.role === USER_ROLE
                         ? 'primary.light'
                         : 'background.default',
                     color:
-                      m.role === 'user'
+                      m.role === USER_ROLE
                         ? 'primary.contrastText'
                         : 'text.primary',
                     borderRadius:
-                      m.role === 'user'
+                      m.role === USER_ROLE
                         ? '20px 20px 5px 20px'
                         : '20px 20px 20px 5px'
                   }}
