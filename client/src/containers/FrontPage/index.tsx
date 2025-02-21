@@ -9,7 +9,8 @@ import {
   Paper,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Typography
 } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import { v4 as uuidv4 } from 'uuid'
@@ -17,6 +18,7 @@ import { IMessage } from './types'
 import { ErrorResponse, handleError } from '../../api/api-utils'
 import { AxiosError } from 'axios'
 import ErrorModal from '../../components/ErrorComponent'
+import ReactMarkdown from 'react-markdown'
 
 const USER_ROLE = 'User'
 
@@ -120,12 +122,34 @@ function FrontPage() {
                   }}
                 >
                   <ListItemText
-                    primary={m.content}
-                    sx={{
-                      '& .MuiListItemText-primary': {
-                        whiteSpace: 'pre-wrap'
-                      }
-                    }}
+                    primary={
+                      <Typography
+                        component='div'
+                        sx={{
+                          '& p': { margin: 0 }, // Poistaa ylimääräiset marginaalit
+                          '& code': {
+                            backgroundColor: '#f5f5f5',
+                            padding: '2px 4px',
+                            borderRadius: '4px',
+                            fontFamily: 'monospace'
+                          },
+                          '& pre': {
+                            backgroundColor: '#f5f5f5',
+                            padding: '10px',
+                            borderRadius: '4px',
+                            overflowX: 'auto'
+                          },
+                          '& blockquote': {
+                            borderLeft: '4px solid #ccc',
+                            paddingLeft: '10px',
+                            fontStyle: 'italic',
+                            color: '#666'
+                          }
+                        }}
+                      >
+                        <ReactMarkdown>{m.content}</ReactMarkdown>
+                      </Typography>
+                    }
                   />
                 </Paper>
               </ListItem>
