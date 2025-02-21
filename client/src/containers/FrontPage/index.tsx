@@ -14,19 +14,28 @@ import {
 import CssBaseline from '@mui/material/CssBaseline'
 import { v4 as uuidv4 } from 'uuid'
 import { IMessage } from './types'
+import { ErrorResponse, handleError } from '../../api/api-utils'
+import { AxiosError } from 'axios'
+import ErrorModal from '../../components/ErrorComponent'
 
 function FrontPage() {
   const [input, setInput] = useState<string>('')
   const [messages, setMessages] = useState<IMessage[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-
+  const [error, setError] = useState<ErrorResponse>()
   const newChatMessage = useMutation({
     mutationFn: postRequest,
     onSuccess: (data) => {
       setMessages((prev) => prev.concat(data))
       setLoading(false)
     },
-    onError: (error) => console.log(error)
+    onError: (error: unknown) => {
+      if (error instanceof AxiosError) {
+        const errorResponse = handleError(error)
+        setError(errorResponse)
+      }
+      setLoading(false)
+    }
   })
 
   const onSubmit = (e: SyntheticEvent) => {
@@ -42,6 +51,17 @@ function FrontPage() {
     newChatMessage.mutate({ input })
   }
 
+  if (error) {
+    return (
+      <ErrorModal
+        onClose={() => setError(undefined)}
+        open={true}
+        statusCode={error.statusCode}
+        title={error.statusText}
+        message={error.message}
+      />
+    )
+  }
   return (
     <>
       <CssBaseline />

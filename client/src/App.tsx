@@ -3,17 +3,17 @@ import {
   QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query'
-import FrontPage from './containers/FrontPage'
-import ResponsiveNavBar from './components/NavBar'
 import { Container } from '@mui/material'
-
-const queryClient = new QueryClient()
-
 import {
   ThemeProvider,
   createTheme,
   styled
 } from '@mui/material/styles'
+import FrontPage from './containers/FrontPage'
+import ResponsiveNavBar from './components/NavBar'
+
+const queryClient = new QueryClient()
+
 const theme = createTheme({
   palette: {
     mode: 'light',
