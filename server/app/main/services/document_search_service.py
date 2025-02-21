@@ -67,4 +67,3 @@ if __name__ == "__main__":
     service = DocumentSearchService()
     query = "Mitä dimensiot ovat?"
     service.search_relevant_document(query, vector_type='sentence')
-    
