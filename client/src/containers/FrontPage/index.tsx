@@ -30,7 +30,6 @@ function FrontPage() {
     onSuccess: (data) => {
       setMessages((prev) => prev.concat(data))
       setLoading(false)
-      setInput('')
     },
     onError: (error: unknown) => {
       if (error instanceof AxiosError) {
@@ -38,7 +37,6 @@ function FrontPage() {
         setError(errorResponse)
       }
       setLoading(false)
-      setInput('')
     }
   })
 
@@ -56,6 +54,7 @@ function FrontPage() {
         id: uuidv4()
       })
     )
+    setInput('')
   }
 
   if (error) {

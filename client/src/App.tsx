@@ -36,7 +36,8 @@ const CustomContainer = styled(Container)(({ theme }) => ({
   paddingRight: '0px',
   [theme.breakpoints.up('sm')]: {
     paddingLeft: '0px',
-    paddingRight: '0px'
+    paddingRight: '0px',
+    maxWidth: '100%'
   }
 }))
 
