@@ -7,6 +7,10 @@ env.read_env()
 class Config:
     GEMINI_API_KEY = env.str('GEMINI_APIKEY')
     GEMINI_API_URL = "https://api.gemini.openai.com/v1/chat"
+    GOOGLE_OAUTH_CLIENT_ID = env.str('GOOGLE_OAUTH_CLIENT_ID')
+    GOOGLE_OAUTH_CLIENT_SECRET = env.str('GOOGLE_OAUTH_CLIENT_SECRET')
+    MONGODB_URI = env.str('MONGODB_URI')
+    JWT_SECRET_KEY = env.str('JWT_SECRET_KEY')
     DEBUG = False
 
 

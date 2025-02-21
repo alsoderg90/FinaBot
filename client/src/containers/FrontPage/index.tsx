@@ -1,6 +1,5 @@
 import { SyntheticEvent, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { postRequest } from './hooks'
 import {
   Box,
   Container,
@@ -15,7 +14,11 @@ import {
 import CssBaseline from '@mui/material/CssBaseline'
 import { v4 as uuidv4 } from 'uuid'
 import { IMessage } from './types'
-import { ErrorResponse, handleError } from '../../api/api-utils'
+import {
+  ErrorResponse,
+  handleError,
+  postRequest
+} from '../../api/api-utils'
 import { AxiosError } from 'axios'
 import ErrorModal from '../../components/ErrorComponent'
 import ReactMarkdown from 'react-markdown'
@@ -30,7 +33,7 @@ function FrontPage() {
   const newChatMessage = useMutation({
     mutationFn: postRequest,
     onSuccess: (data) => {
-      setMessages((prev) => prev.concat(data))
+      setMessages((prev) => prev.concat(data as IMessage))
       setLoading(false)
     },
     onError: (error: unknown) => {
@@ -46,8 +49,8 @@ function FrontPage() {
     e.preventDefault()
     setLoading(true)
     newChatMessage.mutate({
-      input,
-      history: messages
+      data: { data: input, history: messages },
+      url: 'chat'
     })
     setMessages((prev) =>
       prev.concat({
@@ -70,6 +73,7 @@ function FrontPage() {
       />
     )
   }
+
   return (
     <>
       <CssBaseline />

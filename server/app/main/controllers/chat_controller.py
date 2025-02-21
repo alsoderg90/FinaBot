@@ -1,4 +1,5 @@
 from flask import request, jsonify, make_response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx  import Resource
 from ..utils.dto import ChatDto
 from ..services.chat_service import ChatService
@@ -19,8 +20,8 @@ class Chat(Resource):
     def post():
         try:
             user_request = request.get_json()
-            user_input = user_request['data']['input']
-            conversation_history = user_request['data']['history']
+            user_input = user_request['data']
+            conversation_history = user_request['history']
             if (user_input is None) or (user_input == ""):
                 return make_response(jsonify({"error": "Input is required.", "error_code": 400}), 400)
             if len(conversation_history) > 0:

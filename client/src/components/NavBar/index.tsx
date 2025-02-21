@@ -9,14 +9,15 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
-import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
+import { Login } from '../../containers/Login'
+import { useUser } from '../../userContext'
 
 const pages: string[] = []
-const settings: string[] = []
 
 function ResponsiveNavBar() {
+  const { user } = useUser()
   const [anchorElNav, setAnchorElNav] =
     React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] =
@@ -43,7 +44,7 @@ function ResponsiveNavBar() {
 
   return (
     <AppBar position='static'>
-      <Container maxWidth='xl' sx={{ height: '5vh' }}>
+      <Container maxWidth={false} sx={{ height: '5vh' }}>
         <Toolbar disableGutters>
           <AdbIcon
             sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
@@ -58,12 +59,13 @@ function ResponsiveNavBar() {
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
-              textDecoration: 'none'
+              textDecoration: 'none',
+              flexGrow: 1
             }}
           >
             FinaBot
           </Typography>
-          {settings.length > 0 && (
+          {pages.length > 0 && (
             <Box
               sx={{
                 flexGrow: 1,
@@ -110,7 +112,7 @@ function ResponsiveNavBar() {
             sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
           />
           <Typography
-            variant='h5'
+            variant='h6'
             noWrap
             sx={{
               mr: 2,
@@ -125,31 +127,33 @@ function ResponsiveNavBar() {
           >
             FinaBot
           </Typography>
-          <Box
-            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
-          >
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title='Open settings'>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt='Remy Sharp'
-                  src='/static/images/avatar/2.jpg'
-                />
-              </IconButton>
-            </Tooltip>
+          {pages.length > 0 && (
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: 'none', md: 'flex' }
+              }}
+            >
+              {pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
+          )}
+          <Box sx={{ flexGrow: 0, float: 'right' }}>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar {...(user ? { src: user.picture } : {})} />
+            </IconButton>
+
             <Menu
               sx={{ mt: '45px' }}
               id='menu-appbar'
+              component='div'
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: 'top',
@@ -163,13 +167,14 @@ function ResponsiveNavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <MenuItem
+                component='div'
+                key={'User-Menu'}
+                sx={{ padding: 0 }}
+                onClick={handleCloseUserMenu}
+              >
+                <Login />
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

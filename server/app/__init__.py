@@ -1,6 +1,7 @@
 from flask_restx import Api
 from flask import Blueprint
 from .main.controllers.chat_controller import api as chat_ns
+from .main.controllers.login_controller import api as login_ns
 
 blueprint = Blueprint('api', __name__)
 
@@ -12,3 +13,4 @@ api = Api(
 )
 
 api.add_namespace(chat_ns, path='/chat')
+api.add_namespace(login_ns, path='/login')

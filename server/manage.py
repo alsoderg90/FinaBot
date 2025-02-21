@@ -1,13 +1,16 @@
 import os
 import unittest
-from flask import Flask
+
+from flask_jwt_extended import JWTManager
+
 from app.main import create_app
 from app import blueprint
-from flask_cors import CORS
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
-CORS(app)
+
 app.register_blueprint(blueprint)
+app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+JWTManager(app)
 
 
 # Add custom CLI commands

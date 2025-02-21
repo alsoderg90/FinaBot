@@ -11,6 +11,17 @@ import {
 } from '@mui/material/styles'
 import FrontPage from './containers/FrontPage'
 import ResponsiveNavBar from './components/NavBar'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import { googleClientId } from './api/api-utils'
+import { UserProvider } from './userContext'
+import useUserData from './hooks/useUserData'
+
+import { ReactNode } from 'react'
+
+const HomePage = ({ children }: { children: ReactNode }) => {
+  useUserData()
+  return <div>{children}</div>
+}
 
 const queryClient = new QueryClient()
 
@@ -43,14 +54,20 @@ const CustomContainer = styled(Container)(({ theme }) => ({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CustomContainer sx={{ padding: 0, margin: 0 }}>
-          <ResponsiveNavBar />
-          <FrontPage />
-        </CustomContainer>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <QueryClientProvider client={queryClient}>
+        <UserProvider>
+          <ThemeProvider theme={theme}>
+            <CustomContainer sx={{ padding: 0, margin: 0 }}>
+              <HomePage>
+                <ResponsiveNavBar />
+                <FrontPage />
+              </HomePage>
+            </CustomContainer>
+          </ThemeProvider>
+        </UserProvider>
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
   )
 }
 
